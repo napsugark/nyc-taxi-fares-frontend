@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NYC Taxi Fare Prediction</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f6f8;
+      color: #333;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #0077b6;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 15px;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-top: 5px;
+    }
+
+    button {
+      background-color: #0077b6;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #005f86;
+    }
+
+    h2 {
+      margin-top: 30px;
+      color: #023e8a;
+    }
+
+    pre {
+      background-color: #f1f1f1;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+  <h1>NYC Taxi Fare Prediction</h1>
+
+  <form id="predictionForm">
+    <label>
+        Pickup datetime (UTC):
+        <input type="datetime-local" id="pickup_datetime" required />
+    </label>
+
+    <label>
+        Pickup address:
+        <input type="text" id="pickup_address" required />
+    </label>
+
+    <label>
+        Dropoff address:
+        <input type="text" id="dropoff_address" required />
+    </label>
+
+    <label>
+        Passenger count:
+        <input type="number" id="passenger_count" min="1" required />
+    </label>
+
+    <button type="submit">Predict Fare</button>
+  </form>
+
+  <h2>Prediction Result:</h2>
+  <pre id="result"></pre>
+
+  <script>
+    const form = document.getElementById('predictionForm');
+    const resultEl = document.getElementById('result');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const pickup_datetime_raw = document.getElementById('pickup_datetime').value;
+      const pickup_datetime = new Date(pickup_datetime_raw).toISOString();
+
+      const data = {
+        pickup_datetime,
+        pickup_address: document.getElementById('pickup_address').value,
+        dropoff_address: document.getElementById('dropoff_address').value,
+        passenger_count: parseInt(document.getElementById('passenger_count').value, 10),
+    };
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/predictbyaddress', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Server error: ${response.statusText}`);
+        }
+
+        const json = await response.json();
+        // resultEl.textContent = JSON.stringify(json, null, 2);
+        resultEl.textContent = `$${json.prediction[0].toFixed(2)}`; //for one single prediction
+      } catch (error) {
+        resultEl.textContent = 'Error: ${error.message}';
+      }
+    });
+  </script>
+</body>
+</html>
