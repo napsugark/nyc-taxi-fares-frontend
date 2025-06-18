@@ -132,7 +132,7 @@
         // resultEl.textContent = JSON.stringify(json, null, 2);
         resultEl.textContent = `$${json.prediction[0].toFixed(2)}`; //for one single prediction
       } catch (error) {
-        resultEl.textContent = 'Error: ${error.message}';
+        resultEl.textContent = `Error: ${error.message}`;
       }
     });
   </script>
