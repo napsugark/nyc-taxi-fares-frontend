@@ -68,6 +68,20 @@
       white-space: pre-wrap;
       word-wrap: break-word;
     }
+    .spinner {
+      margin: 20px auto;
+      width: 40px;
+      height: 40px;
+      border: 5px solid #ccc;
+      border-top: 5px solid #0077b6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -75,62 +89,65 @@
 
   <form id="predictionForm">
     <label>
-      Pickup datetime (UTC):
-      <input type="datetime-local" id="pickup_datetime" required />
+        Pickup datetime (UTC):
+        <input type="datetime-local" id="pickup_datetime" required />
     </label>
 
     <label>
-      Pickup longitude:
-      <input type="number" step="any" id="pickup_longitude" required />
+        Pickup address:
+        <input type="text" id="pickup_address" required />
     </label>
 
     <label>
-      Pickup latitude:
-      <input type="number" step="any" id="pickup_latitude" required />
+        Dropoff address:
+        <input type="text" id="dropoff_address" required />
     </label>
 
     <label>
-      Dropoff longitude:
-      <input type="number" step="any" id="dropoff_longitude" required />
-    </label>
-
-    <label>
-      Dropoff latitude:
-      <input type="number" step="any" id="dropoff_latitude" required />
-    </label>
-
-    <label>
-      Passenger count:
-      <input type="number" id="passenger_count" min="1" required />
+        Passenger count:
+        <input type="number" id="passenger_count" min="1" required />
     </label>
 
     <button type="submit">Predict Fare</button>
+
+    <div class="spinner" id="spinner" style="display: none;"></div>
+
   </form>
 
   <h2>Prediction Result:</h2>
   <pre id="result"></pre>
 
   <script>
-    const form = document.getElementById('predictionForm');
-    const resultEl = document.getElementById('result');
+     const form = document.getElementById('predictionForm');
+     const resultEl = document.getElementById('result');
 
-    form.addEventListener('submit', async (event) => {
+     const spinner = document.getElementById('spinner');
+
+     function showSpinner() {
+        spinner.style.display = 'block';
+        resultEl.textContent = '';
+    }
+
+     function hideSpinner() {
+        spinner.style.display = 'none';
+      }
+
+     form.addEventListener('submit', async (event) => {
       event.preventDefault();
+      showSpinner();
 
-      const pickup_datetime_raw = document.getElementById('pickup_datetime').value;
+     const pickup_datetime_raw = document.getElementById('pickup_datetime').value;
       const pickup_datetime = new Date(pickup_datetime_raw).toISOString();
 
       const data = {
         pickup_datetime,
-        pickup_longitude: parseFloat(document.getElementById('pickup_longitude').value),
-        pickup_latitude: parseFloat(document.getElementById('pickup_latitude').value),
-        dropoff_longitude: parseFloat(document.getElementById('dropoff_longitude').value),
-        dropoff_latitude: parseFloat(document.getElementById('dropoff_latitude').value),
+        pickup_address: document.getElementById('pickup_address').value,
+        dropoff_address: document.getElementById('dropoff_address').value,
         passenger_count: parseInt(document.getElementById('passenger_count').value, 10),
-      };
+    };
 
       try {
-        const response = await fetch('https://nyc-taxi-fare-prediction.onrender.com/predict', {
+        const response = await fetch('https://nyc-taxi-fare-prediction.onrender.com/predictbyaddress', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
@@ -141,11 +158,14 @@
         }
 
         const json = await response.json();
-        resultEl.textContent = JSON.stringify(json, null, 2);
-        // resultEl.textContent = `Predicted Fare: $${json.prediction[0].toFixed(2)}`;
+        // resultEl.textContent = JSON.stringify(json, null, 2);
+        resultEl.textContent = `$${json.prediction[0].toFixed(2)}`; //for one single prediction
       } catch (error) {
         resultEl.textContent = `Error: ${error.message}`;
+      } finally {
+        hideSpinner();
       }
+
     });
   </script>
 </body>
