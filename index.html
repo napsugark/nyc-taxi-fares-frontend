@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>NYC Taxi Fare Prediction</title>
@@ -81,27 +82,27 @@
 
     <label>
       Pickup longitude:
-      <input type="number" step="any" id="pickup_longitude" required />
+      <input type="number" step="any" id="pickup_longitude" min="-75" max="-70" required />
     </label>
 
     <label>
       Pickup latitude:
-      <input type="number" step="any" id="pickup_latitude" required />
+      <input type="number" step="any" id="pickup_latitude" min="35" max="45" required />
     </label>
 
     <label>
       Dropoff longitude:
-      <input type="number" step="any" id="dropoff_longitude" required />
+      <input type="number" step="any" id="dropoff_longitude" min="-75" max="-70" required />
     </label>
 
     <label>
       Dropoff latitude:
-      <input type="number" step="any" id="dropoff_latitude" required />
+      <input type="number" step="any" id="dropoff_latitude" min="35" max="45" required />
     </label>
 
     <label>
       Passenger count:
-      <input type="number" id="passenger_count" min="1" required />
+      <input type="number" id="passenger_count" min="1" max="6" required />
     </label>
 
     <button type="submit">Predict Fare</button>
@@ -149,4 +150,5 @@
     });
   </script>
 </body>
+
 </html>
