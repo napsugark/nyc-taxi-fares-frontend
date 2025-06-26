@@ -7,19 +7,19 @@
   <style>
     body {
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: #f4f6f8;
-      color: #333;
+      background: #000;
+      color: #FFD700; /* Taxi yellow */
       max-width: 600px;
       margin: 40px auto;
       padding: 20px;
       border-radius: 10px;
-      background-color: white;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: #000;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
     }
 
     h1 {
       text-align: center;
-      color: #0077b6;
+      color: #FFD700;
     }
 
     form {
@@ -35,34 +35,44 @@
     input {
       width: 100%;
       padding: 10px;
-      border: 1px solid #ccc;
+      border: 1px solid #FFD700;
       border-radius: 5px;
       margin-top: 5px;
+      background-color: #111;
+      color: white;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #ffea00;
     }
 
     button {
-      background-color: #0077b6;
-      color: white;
+      background-color: #FFD700;
+      color: black;
       padding: 12px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
       margin-top: 20px;
       font-size: 16px;
-      transition: background-color 0.3s ease;
+      font-weight: bold;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     button:hover {
-      background-color: #005f86;
+      background-color: #ffea00;
+      color: #000;
     }
 
     h2 {
       margin-top: 30px;
-      color: #023e8a;
+      color: #FFD700;
     }
 
     pre {
-      background-color: #f1f1f1;
+      background-color: #222;
+      color: #fff;
       padding: 15px;
       border-radius: 5px;
       overflow-x: auto;
@@ -80,30 +90,30 @@
       <input type="datetime-local" id="pickup_datetime" required />
     </label>
 
-    <label>
-      Pickup longitude:
-      <input type="number" step="0.000001" id="pickup_longitude" min="-75" max="-70" required />
-    </label>
+  <label>
+    Pickup longitude:
+    <input type="number" step="0.000001" id="pickup_longitude" min="-75" max="-70" placeholder="-74.044502" />
+  </label>
 
-    <label>
-      Pickup latitude:
-      <input type="number" step="0.000001" id="pickup_latitude" min="35" max="45" required />
-    </label>
+  <label>
+    Pickup latitude:
+    <input type="number" step="0.000001" id="pickup_latitude" min="35" max="45" placeholder="40.689247" />
+  </label>
 
-    <label>
-      Dropoff longitude:
-      <input type="number" step="0.000001" id="dropoff_longitude" min="-75" max="-70" required />
-    </label>
+  <label>
+    Dropoff longitude:
+    <input type="number" step="0.000001" id="dropoff_longitude" min="-75" max="-70" placeholder="-73.985428" />
+  </label>
 
-    <label>
-      Dropoff latitude:
-      <input type="number" step="0.000001" id="dropoff_latitude" min="35" max="45" required />
-    </label>
+  <label>
+    Dropoff latitude:
+    <input type="number" step="0.000001" id="dropoff_latitude" min="35" max="45" placeholder="40.748817" />
+  </label>
 
-    <label>
-      Passenger count:
-      <input type="number" id="passenger_count" min="1" max="6" required />
-    </label>
+  <label>
+    Passenger count:
+    <input type="number" id="passenger_count" min="1" max="6" placeholder="1" />
+  </label>
 
     <button type="submit">Predict Fare</button>
   </form>
